@@ -1,13 +1,34 @@
 package com.example.demo.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Data
+@TableName(value = "sys_user")
 public class User {
+    @TableId(type = IdType.AUTO)
     private Integer id;
     private String username;
+    @JsonIgnore//忽略字段
     private String password;
     private String nickname;
+    private String email;
+    private String phone;
+    private String address;
+    @TableField(value = "avatar_url")
+    private String avatar;
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     public String getNickname() {
         return nickname;
@@ -17,9 +38,6 @@ public class User {
         this.nickname = nickname;
     }
 
-    private String email;
-    private String phone;
-
     public String getPhone() {
         return phone;
     }
@@ -27,8 +45,6 @@ public class User {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
-    private String address;
 
     public Integer getId() {
         return id;

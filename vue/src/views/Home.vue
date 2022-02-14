@@ -106,12 +106,12 @@
         </div>
 
         <el-table :data="tableData" border stripe :header-cell-class-name="headerBg">
-          <el-table-column prop="date" label="日期" width="140">
-          </el-table-column>
-          <el-table-column prop="name" label="姓名" width="120">
-          </el-table-column>
-          <el-table-column prop="address" label="地址">
-          </el-table-column>
+          <el-table-column prop="id" label="ID" width="80"></el-table-column>
+          <el-table-column prop="username" label="用户名" width="140"></el-table-column>
+          <el-table-column prop="nickname" label="昵称" width="120"></el-table-column>
+          <el-table-column prop="address" label="地址"></el-table-column>
+          <el-table-column prop="email" label="邮箱"></el-table-column>
+          <el-table-column prop="phone" label="电话"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button type="success">编辑 <i class="el-icon-edit"></i> </el-button>
@@ -121,10 +121,13 @@
         </el-table>
         <div style="padding: 10px 0">
           <el-pagination
-              :page-sizes="[5, 10, 15, 20]"
-              :page-size="100"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="pageNum"
+              :page-sizes="[2, 5, 10, 20]"
+              :page-size="pageSize"
               layout="total, sizes, prev, pager, next, jumper"
-              :total="400">
+              :total="total">
           </el-pagination>
         </div>
       </el-main>
@@ -142,20 +145,26 @@ export default {
     HelloWorld
   },
   data() {
-    const item = {
-      date: '2016-05-02',
-      name: '王小虎',
-      address: '上海市普陀区金沙江路 1518 弄'
-    };
     return {
       msg: "hello, gy",
-      tableData: Array(10).fill(item),
+      tableData: [],
+      total: 0,
+      pageNum: 1,
+      pageSize: 2,
       collapseBtnClass: 'el-icon-s-fold',
       isCollapse: false,
       sideWidth: 200,
       logoTextShow:true,
       headerBg: 'headerBg'
     }
+  },
+  created() {
+    fetch("http://localhost:7070/user/page?pageNum=" + this.pageNum + "&pageSize=" + this.pageSize)
+        .then(res => res.json()).then(res=> {
+      console.log(res)
+      this.tableData = res.data;
+      this.total = res.total;
+    })
   },
   methods: {
     collapse() {
@@ -170,6 +179,24 @@ export default {
         this.collapseBtnClass = 'el-icon-s-fold'
         this.logoTextShow = true
       }
+    },
+    load(){
+      fetch("http://localhost:7070/user/page?pageNum=" + this.pageNum + "&pageSize=" + this.pageSize)
+          .then(res => res.json()).then(res=> {
+        console.log(res)
+        this.tableData = res.data;
+        this.total = res.total;
+      })
+    },
+    handleSizeChange(pageSize){
+      console.log(pageSize)
+      this.pageSize = pageSize
+      this.load()
+    },
+    handleCurrentChange(pageNum){
+      console.log(pageNum)
+      this.pageNum = pageNum
+      this.load()
     }
   }
 }
