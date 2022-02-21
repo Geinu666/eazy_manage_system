@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * <p>
@@ -20,13 +21,14 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-  @TableName("sys_user")
+@TableName("sys_user")
 @ApiModel(value = "User对象", description = "")
+@ToString
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-      @ApiModelProperty("ID")
+      @ApiModelProperty("id")
         @TableId(value = "id", type = IdType.AUTO)
       private Integer id;
 
@@ -51,7 +53,6 @@ public class User implements Serializable {
       @ApiModelProperty("创建时间")
       private LocalDateTime createTime;
 
-    private String avatarUrl;
-
-
+      @ApiModelProperty("头像")
+      private String avatarUrl;
 }
